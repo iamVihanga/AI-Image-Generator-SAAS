@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,16 +21,22 @@ import {
   type LoginSchemaT,
 } from "@/features/authentication/schemas/login-schema";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+
 import { GoogleAuthButton } from "./google-auth-button";
 import { AppleAuthButton } from "./apple-auth-button";
 import { Separator } from "@/components/ui/separator";
+import { login } from "../actions/login-action";
+import { toast } from "sonner";
+import { PasswordInput } from "@/components/ui/password-input";
+import { redirect } from "next/navigation";
 
 type Props = {
   className?: string;
 };
 
 export function LoginForm({ className }: Props) {
+  const [isPending, startLoginAction] = useTransition();
+
   const form = useForm<LoginSchemaT>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,17 +45,28 @@ export function LoginForm({ className }: Props) {
     },
   });
 
-  function onSubmit(values: LoginSchemaT) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  // Handle form submission action with useTransition
+  async function handleFormSubmit(formData: LoginSchemaT) {
+    startLoginAction(async () => {
+      const loginResponse = await login(formData);
+
+      if (loginResponse.error) {
+        toast.error(loginResponse.error);
+        return;
+      }
+
+      toast.success("Successfully logged in !");
+      form.reset();
+
+      redirect("/dashboard");
+    });
   }
 
   return (
     <div className={cn("grid gap-6", className)}>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleFormSubmit)}
           className="space-y-6 w-full"
         >
           <FormField
@@ -58,7 +76,11 @@ export function LoginForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john.doe@example.com" {...field} />
+                  <Input
+                    disabled={isPending}
+                    placeholder="john.doe@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -71,13 +93,17 @@ export function LoginForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="***********" {...field} />
+                  <PasswordInput
+                    disabled={isPending}
+                    placeholder="***********"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" loading={isPending}>
             Login
           </Button>
         </form>

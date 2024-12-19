@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { fontSans, fontHeading } from "@/lib/fonts";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,6 +19,7 @@ export default function RootLayout({
         className={`${fontSans.variable} ${fontHeading.variable} font-sans antialiased`}
       >
         {children}
+        <Toaster richColors theme="light" />
       </body>
     </html>
   );

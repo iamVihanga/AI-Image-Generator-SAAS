@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-export const password_regex = new RegExp(
-  '^(?=.*d)(?=.*[!@#$%^&*(),.?":{}|<>])(.{6,})$'
-);
-
 export const signupSchema = z
   .object({
     fullName: z.string().min(3, {
@@ -12,15 +8,9 @@ export const signupSchema = z
     email: z.string().email({
       message: "Please enter a valid email address !",
     }),
-    password: z
-      .string({ required_error: "Password is required !" })
-      .min(6, {
-        message: "Password must be at least 6 characters long !",
-      })
-      .regex(password_regex, {
-        message:
-          "Password must contain at least one number & special character !",
-      }),
+    password: z.string({ required_error: "Password is required !" }).min(6, {
+      message: "Password must be at least 6 characters long !",
+    }),
     confirmPassword: z.string({
       required_error: "Confirm password is required !",
     }),

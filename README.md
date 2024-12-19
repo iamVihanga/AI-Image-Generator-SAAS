@@ -5,8 +5,8 @@
 - [x] Scrimba (Sponsor) 00:15:58
 - [x] Setup & Installation 00:18:16
 - [x] Authentication pages 00:25:15
+- [x] Creating Supabase project 01:01:45
 
-- [ ] Creating Supabase project 01:01:45
 - [ ] Adding SSR authentication with Supabase 01:02:55
 - [ ] App sidebar and Internal pages 01:36:55
 
@@ -26,3 +26,10 @@
 - [ ] Creating Dashboard page 11:19:50
 - [ ] Adding Landing page 11:49:50
 - [ ] Making it mobile responsive 12:59:45
+
+---
+
+### Documentation Guides
+
+- Supabase Auth: Email Verification link Changed from Supabase Dashboard
+  - "{{ .SiteURL }}/verify?token_hash={{ .TokenHash }}&type=signup"

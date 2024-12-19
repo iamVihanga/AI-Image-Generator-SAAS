@@ -1,8 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
+
+import {
+  signupSchema,
+  type SignupSchemaT,
+} from "@/features/authentication/schemas/signup-schema";
+import { cn } from "@/lib/utils";
+import { signup } from "../actions/signup-action";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,22 +22,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import {
-  signupSchema,
-  type SignupSchemaT,
-} from "@/features/authentication/schemas/signup-schema";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { GoogleAuthButton } from "./google-auth-button";
 import { AppleAuthButton } from "./apple-auth-button";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
 
 type Props = {
   className?: string;
 };
 
 export function SignupForm({ className }: Props) {
+  const [isPending, startSignupAction] = useTransition();
+
   const form = useForm<SignupSchemaT>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -40,17 +46,28 @@ export function SignupForm({ className }: Props) {
     },
   });
 
-  function onSubmit(values: SignupSchemaT) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function handleFormSubmit(formData: SignupSchemaT) {
+    startSignupAction(async () => {
+      const signupResponse = await signup(formData);
+
+      if (signupResponse.error) {
+        toast.error(signupResponse.error);
+        return;
+      }
+
+      toast.success(
+        "Signed up successfully! Please confirm your email address."
+      );
+      form.reset();
+      redirect("/login");
+    });
   }
 
   return (
     <div className={cn("grid gap-6", className)}>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleFormSubmit)}
           className="space-y-6 w-full"
         >
           <FormField
@@ -60,7 +77,11 @@ export function SignupForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John R. Doe" {...field} />
+                  <Input
+                    disabled={isPending}
+                    placeholder="John R. Doe"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -73,7 +94,11 @@ export function SignupForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="john.doe@example.com" {...field} />
+                  <Input
+                    disabled={isPending}
+                    placeholder="john.doe@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -86,7 +111,11 @@ export function SignupForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="***********" {...field} />
+                  <PasswordInput
+                    disabled={isPending}
+                    placeholder="***********"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,13 +128,17 @@ export function SignupForm({ className }: Props) {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="***********" {...field} />
+                  <PasswordInput
+                    disabled={isPending}
+                    placeholder="***********"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" loading={isPending}>
             Signup
           </Button>
         </form>

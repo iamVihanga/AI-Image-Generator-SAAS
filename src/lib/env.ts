@@ -1,6 +1,4 @@
-import { config } from "dotenv";
-import { expand } from "dotenv-expand";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 
 const envSchema = z.object({
   SUPABASE_URL: z.string().min(1),
@@ -17,14 +15,11 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1),
 });
 
-expand(config());
+export const env = envSchema.parse(process.env);
 
-try {
-  envSchema.parse(process.env);
-} catch (e) {
-  if (e instanceof ZodError) {
-    console.error("Environment validation error:", e.errors);
+// Extend the global processEnv interface
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv extends z.infer<typeof envSchema> {}
   }
 }
-
-export default envSchema.parse(process.env);
