@@ -12,11 +12,12 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { nav_items_data } from "@/lib/constants";
 
 export function NavMain({
   items,
 }: {
-  items: {
+  items?: {
     title: string;
     url: string;
     icon?: LucideIcon;
@@ -28,6 +29,8 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+
+  items = items || nav_items_data.navMain;
 
   return (
     <SidebarGroup>

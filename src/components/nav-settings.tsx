@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { type LucideIcon } from "lucide-react";
 
 import {
@@ -10,14 +12,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { nav_items_data } from "@/lib/constants";
 
 export function NavSettings({
   items,
 }: {
-  items: {
+  items?: {
     title: string;
     url: string;
     icon?: LucideIcon;
@@ -29,6 +30,8 @@ export function NavSettings({
   }[];
 }) {
   const pathname = usePathname();
+
+  items = items || nav_items_data.navSettings;
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">

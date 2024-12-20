@@ -6,9 +6,8 @@
 - [x] Setup & Installation 00:18:16
 - [x] Authentication pages 00:25:15
 - [x] Creating Supabase project 01:01:45
-
-- [ ] Adding SSR authentication with Supabase 01:02:55
-- [ ] App sidebar and Internal pages 01:36:55
+- [x] Adding SSR authentication with Supabase 01:02:55
+- [x] App sidebar and Internal pages 01:36:55
 
 - [ ] Image generation using Replicate API 02:04:40
 - [ ] Storing image in Supabase 03:26:55

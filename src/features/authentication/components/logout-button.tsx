@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import React, { useTransition } from "react";
 import { logout } from "../actions/logout-action";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type Props = {
   className?: string;
@@ -25,7 +26,7 @@ export function LogoutButton({ className, isIcon }: Props) {
       size={isIcon ? "icon" : "default"}
       onClick={handleLogout}
       loading={isPending}
-      className={className}
+      className={cn(className)}
     >
       Logout
     </Button>
