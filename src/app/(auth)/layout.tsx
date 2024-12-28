@@ -28,7 +28,7 @@ export default function AuthLayout({ children }: Props) {
           <Logo />
         </div>
         <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
+          <blockquote className="space-y-2 text-foreground">
             <p className="text-lg">
               &ldquo;“Pictoria AI is a game changer for me. I have been able to
               generate high quality professional headshots within minutes. It

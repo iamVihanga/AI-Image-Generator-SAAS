@@ -10,6 +10,8 @@
 - [x] App sidebar and Internal pages 01:36:55
 
 - [ ] Image generation using Replicate API 02:04:40
+      -- Last viewed: https://youtu.be/7AQNeii5K7E&t=10526 (2:55:26)
+
 - [ ] Storing image in Supabase 03:26:55
 - [ ] Create Image gallery component 03:56:40
 - [ ] Flux model Training 04:49:22

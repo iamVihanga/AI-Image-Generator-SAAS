@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { fontSans, fontHeading } from "@/lib/fonts";
 import "./globals.css";
+
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/global/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,12 +16,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${fontSans.variable} ${fontHeading.variable} font-sans antialiased`}
       >
-        {children}
-        <Toaster richColors theme="light" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster richColors theme="light" />
+        </ThemeProvider>
       </body>
     </html>
   );

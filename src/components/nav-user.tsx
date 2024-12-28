@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { LogoutButton } from "@/features/authentication/components/logout-button";
+import { ThemeToggle } from "./global/toggle-theme";
 
 export function NavUser({
   user,
@@ -106,6 +107,12 @@ export function NavUser({
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem asChild>
+              <ThemeToggle />
+            </DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
