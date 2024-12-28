@@ -1,3 +1,7 @@
+"use client";
+
+import Image from "next/image";
+
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -7,29 +11,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ImageIcon } from "lucide-react";
-import Image from "next/image";
-
-const images = [
-  {
-    src: "/hero-images/Charismatic Young Man with a Warm Smile and Stylish Tousled Hair.jpeg",
-    alt: "text",
-  },
-  {
-    src: "/hero-images/Confident Businesswoman on Turquoise Backdrop.jpeg",
-    alt: "text",
-  },
-  {
-    src: "/hero-images/Confident Woman in Red Outfit.jpeg",
-    alt: "text",
-  },
-  {
-    src: "/hero-images/Futuristic Helmet Portrait.jpeg",
-    alt: "text",
-  },
-];
+import useGenerateStore from "../store/useGenerateStore";
+import { LottieLoader } from "@/components/global/lottie-loader";
 
 export function ImageArea() {
-  if (images.length === 0) {
+  const { images, loading } = useGenerateStore();
+
+  if (images.length === 0 && !loading) {
     return (
       <Card className="w-full h-full bg-muted/50">
         <CardContent className="h-full flex flex-col items-center justify-center p-6 text-center space-y-2">
@@ -47,6 +35,16 @@ export function ImageArea() {
     );
   }
 
+  if (loading) {
+    return (
+      <Card className="w-full h-full bg-muted/50">
+        <CardContent className="h-full flex flex-col items-center justify-center text-center space-y-2">
+          {/* <LottieLoader className="size-44 opacity-30" /> */}
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-full h-full bg-muted/30 flex items-center justify-center">
       <Carousel className="w-2/3">
@@ -55,9 +53,11 @@ export function ImageArea() {
             <CarouselItem key={index}>
               <div className="p-1 relative flex items-center justify-center rounded-lg overflow-hidden aspect-square size-full group transition-all duration-300 ease-in-out">
                 <Image
-                  src={image.src}
-                  alt={image.alt}
+                  src={image.url}
+                  alt={"Generated image"}
+                  placeholder="blur"
                   fill
+                  blurDataURL={image.blurUrl}
                   className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>

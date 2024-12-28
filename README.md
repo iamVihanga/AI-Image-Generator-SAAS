@@ -8,11 +8,10 @@
 - [x] Creating Supabase project 01:01:45
 - [x] Adding SSR authentication with Supabase 01:02:55
 - [x] App sidebar and Internal pages 01:36:55
-
-- [ ] Image generation using Replicate API 02:04:40
-      -- Last viewed: https://youtu.be/7AQNeii5K7E&t=10526 (2:55:26)
+- [x] Image generation using Replicate API 02:04:40
 
 - [ ] Storing image in Supabase 03:26:55
+
 - [ ] Create Image gallery component 03:56:40
 - [ ] Flux model Training 04:49:22
 - [ ] Implementing Webhook 05:52:34

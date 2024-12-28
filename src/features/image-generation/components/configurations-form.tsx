@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { InfoIcon, SparklesIcon } from "lucide-react";
 
 import {
   configurationFormSchema,
@@ -34,11 +36,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { InfoIcon, SparklesIcon } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
+import useGenerateStore from "../store/useGenerateStore";
 
 export function ConfigurationsForm() {
+  const { generateImage, loading } = useGenerateStore();
+
   const form = useForm<ConfigurationFormSchemaT>({
     resolver: zodResolver(configurationFormSchema),
     defaultValues: {
@@ -53,8 +57,27 @@ export function ConfigurationsForm() {
     },
   });
 
-  function onSubmit(values: ConfigurationFormSchemaT) {
-    console.log(values);
+  // Listing to model change effect
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "model") {
+        let newSteps;
+
+        if (value.model === "black-forest-labs/flux-schnell") {
+          newSteps = 4;
+        } else newSteps = 28;
+
+        if (newSteps !== undefined) {
+          form.setValue("num_inference_steps", newSteps);
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  async function onSubmit(values: ConfigurationFormSchemaT) {
+    await generateImage(values);
   }
 
   return (
@@ -223,7 +246,12 @@ export function ConfigurationsForm() {
                         <Slider
                           defaultValue={[field.value]}
                           min={1}
-                          max={50}
+                          max={
+                            form.getValues("model") ===
+                            "black-forest-labs/flux-schnell"
+                              ? 4
+                              : 50
+                          }
                           step={1}
                           onValueChange={(e) => field.onChange(e[0])}
                         />
@@ -306,7 +334,6 @@ export function ConfigurationsForm() {
                     <FormItem>
                       <FormLabel className="flex items-center justify-between">
                         <div>Prompt</div>
-                        <span>{field.value}</span>
                       </FormLabel>
                       <FormControl>
                         <Textarea {...field} rows={6} />
@@ -323,6 +350,7 @@ export function ConfigurationsForm() {
                 type="submit"
                 className="font-medium w-full shadow-lg"
                 icon={<SparklesIcon className="size-4" />}
+                loading={loading}
               >
                 Generate Image
               </Button>
