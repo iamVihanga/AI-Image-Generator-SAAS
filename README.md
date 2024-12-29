@@ -9,10 +9,10 @@
 - [x] Adding SSR authentication with Supabase 01:02:55
 - [x] App sidebar and Internal pages 01:36:55
 - [x] Image generation using Replicate API 02:04:40
-
-- [ ] Storing image in Supabase 03:26:55
+- [x] Storing image in Supabase 03:26:55
 
 - [ ] Create Image gallery component 03:56:40
+
 - [ ] Flux model Training 04:49:22
 - [ ] Implementing Webhook 05:52:34
 - [ ] Render all models 06:13:36
@@ -32,4 +32,14 @@
 ### Documentation Guides
 
 - Supabase Auth: Email Verification link Changed from Supabase Dashboard
+
   - "{{ .SiteURL }}/verify?token_hash={{ .TokenHash }}&type=signup"
+
+- Supabase Tables:
+
+  - Created 'generated_images' table
+  - Added RLS Policies for 'generated_images' table
+
+- Supabase Storage:
+  - Created 'generated_images' bucket
+  - Created policies for 'generated_images' bucket

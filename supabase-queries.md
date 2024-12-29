@@ -67,6 +67,7 @@ CREATE TABLE
     WIDTH NUMERIC NULL,
     HEIGHT NUMERIC NULL,
     aspect_ratio TEXT NULL,
+    blur_data TEXT NULL,
     CONSTRAINT generated_images_pkey PRIMARY KEY (id),
     CONSTRAINT generated_images_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id)
   ) TABLESPACE pg_default;
@@ -74,14 +75,14 @@ CREATE TABLE
 -- Enable ROW level security
 ALTER TABLE public.generated_images ENABLE ROW LEVEL SECURITY;
 
--- Enable users to view their own data only 
+-- Enable users to view their own data only
 create policy "Enable users to view their own data only"
 on "public"."generated_images"
 for select
 to authenticated
 using ((( SELECT auth.uid() AS uid) = user_id));
 
--- Enable users to insert their own data only 
+-- Enable users to insert their own data only
 create policy "Enable insert for users based on user_id"
 on "public"."generated_images"
 for insert

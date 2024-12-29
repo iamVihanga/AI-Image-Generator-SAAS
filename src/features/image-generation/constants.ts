@@ -22,3 +22,5 @@ export const outputFormats: OutputFormat[] = [
   { value: "jpg", label: "JPG" },
   { value: "png", label: "PNG" },
 ];
+
+export const IMAGE_BUCKET_NAME = "generated_images";

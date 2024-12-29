@@ -4,6 +4,7 @@ import { z } from "zod";
 import { type ConfigurationFormSchemaT } from "../schemas/configuration-schema";
 import { generateImageAction } from "../actions/generate-image-action";
 import { toast } from "sonner";
+import { storeImageAction } from "../actions/store-images-action";
 
 interface GenerateStore {
   loading: boolean;
@@ -43,6 +44,7 @@ const useGenerateStore = create<GenerateStore>((set) => ({
           return {
             url: url,
             blurUrl: blurData?.base64,
+            ...config,
           };
         })
       );
@@ -51,6 +53,8 @@ const useGenerateStore = create<GenerateStore>((set) => ({
         images: urlSet,
         loading: false,
       });
+
+      await storeImageAction(urlSet);
     } catch (error) {
       console.log(error);
 
