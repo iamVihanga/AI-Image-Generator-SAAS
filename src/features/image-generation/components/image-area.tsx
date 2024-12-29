@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ImageIcon, Loader } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import useGenerateStore from "../store/useGenerateStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -40,7 +40,7 @@ export function ImageArea() {
       <Card className="w-full h-full bg-muted/50">
         <CardContent className="h-full flex flex-col items-center justify-center text-center space-y-2">
           <Skeleton className="aspect-square w-2/3 shadow-xl rounded-2xl flex items-center justify-center">
-            <Loader className="size-10 text-muted-foreground/60 animate-spin" />
+            <ImageIcon className="size-10 text-muted-foreground/60 animate-pulse" />
           </Skeleton>
         </CardContent>
       </Card>

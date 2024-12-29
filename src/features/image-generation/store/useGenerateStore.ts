@@ -20,9 +20,18 @@ const useGenerateStore = create<GenerateStore>((set) => ({
   error: null,
 
   generateImage: async (config: ConfigurationFormSchemaT) => {
-    set({ loading: true, error: null });
-
     try {
+      set({ loading: true, error: null });
+
+      // Loading toast
+      const toastId = toast.loading(
+        `${
+          config.num_outputs > 1
+            ? `${config.num_outputs} Images are being generated`
+            : "Image is generating"
+        }...`
+      );
+
       const { data, error, success } = await generateImageAction(config);
 
       if (!success) {
@@ -49,12 +58,30 @@ const useGenerateStore = create<GenerateStore>((set) => ({
         })
       );
 
+      // Update state
       set({
         images: urlSet,
         loading: false,
       });
 
+      // Success toast
+      toast.success(
+        `${
+          config.num_outputs > 1 ? `${config.num_outputs} Images` : "Image"
+        } generated successfully...!`,
+        { id: toastId }
+      );
+
+      // Store images in the supabase -> Action call
       await storeImageAction(urlSet);
+
+      // Success toast
+      toast.success(
+        `${
+          config.num_outputs > 1 ? `Images are` : "Image"
+        } saved to library..!`,
+        { id: toastId }
+      );
     } catch (error) {
       console.log(error);
 
