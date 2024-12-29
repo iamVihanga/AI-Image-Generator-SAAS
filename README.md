@@ -41,5 +41,9 @@
   - Added RLS Policies for 'generated_images' table
 
 - Supabase Storage:
+
   - Created 'generated_images' bucket
   - Created policies for 'generated_images' bucket
+
+- Next Config
+  - Update protocol for supabase hostname with projectID

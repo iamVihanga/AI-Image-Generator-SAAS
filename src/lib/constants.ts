@@ -8,7 +8,6 @@ import {
   SquareTerminal,
 } from "lucide-react";
 
-// This is sample data.
 export const nav_items_data = {
   navMain: [
     {
@@ -51,3 +50,5 @@ export const nav_items_data = {
     },
   ],
 };
+
+export const SUPABASE_IMAGE_BUCKET_NAME = "generated_images";

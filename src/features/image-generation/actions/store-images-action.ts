@@ -5,8 +5,7 @@ import { randomUUID } from "crypto";
 
 import { createClient } from "@/lib/supabase/server";
 import { type Database } from "@/lib/supabase/database.types";
-
-import { IMAGE_BUCKET_NAME } from "../constants";
+import { SUPABASE_IMAGE_BUCKET_NAME } from "@/lib/constants";
 
 type StoreImageInput = {
   url: string;
@@ -46,7 +45,7 @@ export async function storeImageAction(data: StoreImageInput[]) {
     const filePath = `${user.id}/${fileName}`;
 
     const { error: storageError } = await supabase.storage
-      .from(IMAGE_BUCKET_NAME)
+      .from(SUPABASE_IMAGE_BUCKET_NAME)
       .upload(filePath, arrayBuffer, {
         contentType: `image/${type}`,
         cacheControl: "3600",
