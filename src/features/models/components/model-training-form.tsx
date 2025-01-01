@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useId, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Brain } from "lucide-react";
+import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { client } from "@/lib/rpc";
 
 import {
-  trainModelFormSchema,
-  type TrainModelFormSchemaT,
+  fileUploadSchema,
+  type FileUploadSchemaT,
 } from "../schemas/train-model-schema";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -20,10 +25,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Brain } from "lucide-react";
+import { getPresignedStorageUrl } from "../actions/presiged-url-action";
 
 interface ModelTrainingFormProps {
   className?: string;
@@ -32,8 +36,10 @@ interface ModelTrainingFormProps {
 export default function ModelTrainingForm({
   className,
 }: ModelTrainingFormProps) {
-  const form = useForm<TrainModelFormSchemaT>({
-    resolver: zodResolver(trainModelFormSchema),
+  const [isTrainingPending, startTrainingAction] = useTransition();
+
+  const form = useForm<FileUploadSchemaT>({
+    resolver: zodResolver(fileUploadSchema),
     defaultValues: {
       modelName: "",
       zipFile: undefined,
@@ -43,8 +49,74 @@ export default function ModelTrainingForm({
 
   const fileRef = form.register("zipFile");
 
-  const onSubmit = async (data: TrainModelFormSchemaT) => {
-    console.log(data);
+  const toastId = useId();
+
+  const onSubmit = async (formData: FileUploadSchemaT) => {
+    toast.loading("Uploading file...", { id: toastId });
+
+    try {
+      startTrainingAction(async () => {
+        // 1. Get presigned URL
+        const data = await getPresignedStorageUrl(formData.zipFile[0].name);
+
+        if (data.error || !data.signedUrl) {
+          toast.error(data.error || "Failed to upload the file", {
+            id: toastId,
+          });
+          return;
+        }
+
+        // 2. Upload file
+        const urlResponse = await fetch(data.signedUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": formData.zipFile[0].type,
+          },
+          body: formData.zipFile[0],
+        });
+
+        if (!urlResponse.ok) {
+          throw new Error("Upload failed");
+        }
+
+        const urlResponseData = await urlResponse.json();
+
+        toast.loading("File uploaded successfully !", {
+          id: toastId,
+          description: "Launching model training process...",
+        });
+
+        // 3. Call train endpoint with fileKey (via RPC)
+        const trainResponse = await client.api.model.train.$post({
+          json: {
+            fileKey: urlResponseData.Key,
+            modelName: formData.modelName,
+            gender: formData.gender,
+          },
+        });
+
+        const trainResult = await trainResponse.json();
+
+        if (trainResult.error) {
+          toast.error(trainResult.error, { id: toastId, duration: 5000 });
+          return;
+        }
+
+        toast.success("Training started successfully !", {
+          id: toastId,
+          description: "You'll receive a notification once it gets completed !",
+          duration: 5000,
+        });
+
+        // Reset form
+        form.reset();
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to start training";
+
+      toast.error(errorMessage, { id: toastId, duration: 5000 });
+    }
   };
 
   return (
@@ -159,7 +231,7 @@ export default function ModelTrainingForm({
               type="submit"
               className="font-medium w-full shadow-lg"
               icon={<Brain className="size-4" />}
-              // loading={loading}
+              loading={isTrainingPending}
             >
               Train Model
             </Button>

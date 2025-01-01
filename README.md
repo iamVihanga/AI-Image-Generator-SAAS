@@ -14,7 +14,7 @@
 
 - [ ] Flux model Training 04:49:22
 
-  - Last viewed: https://youtu.be/7AQNeii5K7E?t=19106 (5:18:26 - Created train model form)
+  - Last viewed: https://youtu.be/7AQNeii5K7E?t=20696 (Handle model creation with Replicate API)
 
 - [ ] Implementing Webhook 05:52:34
 - [ ] Render all models 06:13:36
@@ -46,6 +46,11 @@
 
   - Created 'generated_images' bucket
   - Created policies for 'generated_images' bucket
+  - Create 'training_data' bucket
 
 - Next Config
   - Update protocol for supabase hostname with projectID
+
+## Todo List
+
+[ ] Convert native API routes to Hono

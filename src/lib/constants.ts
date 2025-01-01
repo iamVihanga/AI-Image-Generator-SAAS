@@ -52,3 +52,4 @@ export const nav_items_data = {
 };
 
 export const SUPABASE_IMAGE_BUCKET_NAME = "generated_images";
+export const SUPABASE_TRAINING_DATA_BUCKET_NAME = "training_data";

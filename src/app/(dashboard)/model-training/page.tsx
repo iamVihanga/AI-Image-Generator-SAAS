@@ -1,5 +1,5 @@
-import ModelTrainingForm from "@/features/model-training/components/model-training-form";
-import { TrainingBanner } from "@/features/model-training/components/training-banner";
+import ModelTrainingForm from "@/features/models/components/model-training-form";
+import { TrainingBanner } from "@/features/models/components/training-banner";
 
 export default function ModelTrainingPage() {
   return (
