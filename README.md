@@ -10,10 +10,12 @@
 - [x] App sidebar and Internal pages 01:36:55
 - [x] Image generation using Replicate API 02:04:40
 - [x] Storing image in Supabase 03:26:55
-
-- [ ] Create Image gallery component 03:56:40
+- [x] Create Image gallery component 03:56:40
 
 - [ ] Flux model Training 04:49:22
+
+  - Last viewed: https://youtu.be/7AQNeii5K7E?t=19106 (5:18:26 - Created train model form)
+
 - [ ] Implementing Webhook 05:52:34
 - [ ] Render all models 06:13:36
 - [ ] Using our custom model to generate images 07:20:15

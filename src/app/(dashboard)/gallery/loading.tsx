@@ -5,10 +5,10 @@ export default function GalleryLoading() {
   return (
     <ScrollArea className="h-full">
       <section className="container mx-auto">
-        <Skeleton className="h-10 w-48 mb-1" />
-        <Skeleton className="h-6 w-96 mb-6" />
+        <Skeleton className="h-10 sm:w-48 w-32 mb-1" />
+        <Skeleton className="h-6 sm:w-96 w-60 mb-6" />
 
-        <div className="columns-4 gap-4 space-y-4">
+        <div className="sm:columns-4 columns-2 gap-4 space-y-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="break-inside-avoid">
               <Skeleton className="w-full h-[300px] rounded" />
@@ -18,4 +18,4 @@ export default function GalleryLoading() {
       </section>
     </ScrollArea>
   );
-} 
+}

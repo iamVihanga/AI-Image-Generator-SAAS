@@ -27,7 +27,7 @@ export function Gallery({ images }: GalleryProps) {
 
   return (
     <section className="container mx-auto py-4">
-      <div className="columns-4 gap-4 space-y-4">
+      <div className="sm:columns-4 columns-2 gap-4 space-y-4">
         {images.map((image) => (
           <div key={image.id} className="break-inside-avoid">
             <Card

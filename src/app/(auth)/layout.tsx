@@ -39,8 +39,9 @@ export default function AuthLayout({ children }: Props) {
           </blockquote>
         </div>
       </div>
+
       <ScrollArea className="relative md:col-span-2 lg:col-span-2">
-        <div className="py-12 px-8 h-screen flex flex-col items-center justify-center">
+        <div className="sm:py-12 py-0 sm:px-8 px-0 h-screen flex flex-col items-center justify-center">
           {children}
         </div>
       </ScrollArea>

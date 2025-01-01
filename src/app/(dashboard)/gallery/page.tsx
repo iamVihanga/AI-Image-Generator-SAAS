@@ -8,8 +8,8 @@ export default async function GalleryPage() {
   return (
     <ScrollArea className="h-full">
       <section className="container mx-auto">
-        <h1 className="font-heading text-3xl font-semibold mb-1">My Images</h1>
-        <p className="text-muted-foreground mb-6">
+        <h1 className="font-heading text-3xl font-bold mb-1">My Images</h1>
+        <p className="text-sm text-muted-foreground mb-6">
           Here you can see all images you have generated. Click on images to
           view details
         </p>
