@@ -14,10 +14,10 @@
 - [x] Flux model Training 04:49:22
 - [x] Implementing Webhook 05:52:34
 - [x] Render all models 06:13:36
-
-- [ ] Using our custom model to generate images 07:20:15
+- [x] Using our custom model to generate images 07:20:15
 
 - [ ] Adding billing/subscription functionality using stripe 07:39:17
+
 - [ ] Stripe setup 07:46:00
 - [ ] Creating Pricing component 08:18:22
 - [ ] Adding credits functionality 09:22:30
