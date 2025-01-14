@@ -7,6 +7,11 @@ import { SUPABASE_TRAINING_DATA_BUCKET_NAME } from "@/lib/constants";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { replicate } from "@/lib/replicate/client";
 
+const WEBHOOK_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.NGROK_HOST
+    : process.env.NEXT_PUBLIC_APP_URL;
+
 const app = new Hono()
   /**
    * Model Training Route
@@ -42,7 +47,7 @@ const app = new Hono()
       };
 
       const fileName = input.fileKey.replace(
-        SUPABASE_TRAINING_DATA_BUCKET_NAME,
+        `${SUPABASE_TRAINING_DATA_BUCKET_NAME}/`,
         ""
       );
 
@@ -84,10 +89,28 @@ const app = new Hono()
             input_images: fileUrl.signedUrl,
             trigger_word: "ohwx",
           },
+          webhook: `${WEBHOOK_URL}/api/webhook/training?userId=${
+            user?.id
+          }&modelName=${encodeURIComponent(
+            input.modelName
+          )}&fileName=${encodeURIComponent(fileName)}`,
+          webhook_events_filter: ["completed"],
         }
       );
 
-      console.log(training);
+      // 3. Add model values to supabase database
+      const { data: storedModel, error: storeError } = await supabaseAdmin
+        .from("models")
+        .insert({
+          model_id: modelId,
+          user_id: user?.id,
+          model_name: input.modelName,
+          gender: input.gender,
+          training_status: training.status,
+          trigger_word: "ohwx",
+          training_steps: 1200,
+          training_id: training.id,
+        });
 
       return c.json(
         {

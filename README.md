@@ -11,14 +11,12 @@
 - [x] Image generation using Replicate API 02:04:40
 - [x] Storing image in Supabase 03:26:55
 - [x] Create Image gallery component 03:56:40
+- [x] Flux model Training 04:49:22
+- [x] Implementing Webhook 05:52:34
+- [x] Render all models 06:13:36
 
-- [ ] Flux model Training 04:49:22
-
-  - Last viewed: https://youtu.be/7AQNeii5K7E?t=20696 (Handle model creation with Replicate API)
-
-- [ ] Implementing Webhook 05:52:34
-- [ ] Render all models 06:13:36
 - [ ] Using our custom model to generate images 07:20:15
+
 - [ ] Adding billing/subscription functionality using stripe 07:39:17
 - [ ] Stripe setup 07:46:00
 - [ ] Creating Pricing component 08:18:22
@@ -49,8 +47,12 @@
   - Create 'training_data' bucket
 
 - Next Config
+
   - Update protocol for supabase hostname with projectID
+
+- Webhook Tasks
+  - Ngrok development mode start command: "npx ngrok http http://localhost:3000"
 
 ## Todo List
 
-[ ] Convert native API routes to Hono
+[x] Convert native API routes to Hono

@@ -10,7 +10,7 @@ CREATE TYPE public.training_status AS ENUM(
 );
 
 CREATE TYPE public.gender AS ENUM(
-  'man',
+  'men',
   'women'
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE
     training_status public.training_status NULL,
     training_steps NUMERIC NULL DEFAULT '0'::NUMERIC,
     training_time TEXT NULL,
-    gender public.gender NULL DEFAULT 'man'::gender,
+    gender public.gender NULL DEFAULT 'men'::gender,
     training_id TEXT NULL,
     CONSTRAINT models_pkey PRIMARY KEY (id),
     CONSTRAINT models_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users (id)

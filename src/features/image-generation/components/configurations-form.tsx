@@ -39,14 +39,25 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import useGenerateStore from "../store/useGenerateStore";
+import { Tables } from "@/lib/supabase/database.types";
 
-export function ConfigurationsForm() {
+interface ConfigurationProps {
+  userModels: Tables<"models">[];
+  model_id?: string;
+}
+
+export function ConfigurationsForm({
+  userModels,
+  model_id,
+}: ConfigurationProps) {
   const { generateImage, loading } = useGenerateStore();
 
   const form = useForm<ConfigurationFormSchemaT>({
     resolver: zodResolver(configurationFormSchema),
     defaultValues: {
-      model: "black-forest-labs/flux-dev",
+      model: model_id
+        ? `${process.env.NEXT_PUBLIC_REPLICATE_USER_NAME}/${model_id}`
+        : "black-forest-labs/flux-dev",
       prompt: "",
       guidance: 3.5,
       num_outputs: 1,
@@ -77,7 +88,27 @@ export function ConfigurationsForm() {
   }, [form]);
 
   async function onSubmit(values: ConfigurationFormSchemaT) {
-    await generateImage(values);
+    const newValues = {
+      ...values,
+      prompt: values.model.startsWith(
+        `${process.env.NEXT_PUBLIC_REPLICATE_USER_NAME}/`
+      )
+        ? (() => {
+            const modelId = values.model
+              .replace(`${process.env.NEXT_PUBLIC_REPLICATE_USER_NAME}/`, "")
+              .split(":")[0];
+            const selectedModel = userModels.find(
+              (model) => model.model_id === modelId
+            );
+
+            return `Photo of a ${selectedModel?.trigger_word || "ohwx"} ${
+              selectedModel?.gender
+            }, ${values.prompt}`;
+          })()
+        : values.prompt,
+    };
+
+    await generateImage(newValues);
   }
 
   return (
@@ -124,6 +155,18 @@ export function ConfigurationsForm() {
                               {model.name}
                             </SelectItem>
                           ))}
+
+                          {userModels.map(
+                            (model) =>
+                              model.training_status === "succeeded" && (
+                                <SelectItem
+                                  key={model.id}
+                                  value={`${process.env.NEXT_PUBLIC_REPLICATE_USER_NAME}/${model.model_id}:${model.version}`}
+                                >
+                                  {model.model_name}
+                                </SelectItem>
+                              )
+                          )}
                         </SelectContent>
                       </Select>
 

@@ -13,18 +13,42 @@ interface ImageGenerationResponse {
 export async function generateImageAction(
   configurations: ConfigurationFormSchemaT
 ): Promise<ImageGenerationResponse> {
-  const modelInput = {
-    prompt: configurations.prompt,
-    go_fast: true,
-    guidance: configurations.guidance,
-    megapixels: "1",
-    num_outputs: configurations.num_outputs,
-    aspect_ratio: configurations.aspect_ratio,
-    output_format: configurations.output_format,
-    output_quality: configurations.output_quality,
-    prompt_strength: 0.8,
-    num_inference_steps: configurations.num_inference_steps,
-  };
+  if (!process.env.REPLICATE_API_TOKEN) {
+    return {
+      error: "Replicate API token is not set",
+      success: false,
+      data: null,
+    };
+  }
+
+  const modelInput = configurations.model.startsWith(
+    `${process.env.NEXT_PUBLIC_REPLICATE_USER_NAME}/`
+  )
+    ? {
+        model: "dev",
+        prompt: configurations.prompt,
+        lora_scale: 1,
+        guidance: configurations.guidance,
+        num_outputs: configurations.num_outputs,
+        aspect_ratio: configurations.aspect_ratio,
+        output_format: configurations.output_format,
+        output_quality: configurations.output_quality,
+        prompt_strength: 0.8,
+        num_inference_steps: configurations.num_inference_steps,
+        extra_lora_scale: 0,
+      }
+    : {
+        prompt: configurations.prompt,
+        go_fast: true,
+        guidance: configurations.guidance,
+        megapixels: "1",
+        num_outputs: configurations.num_outputs,
+        aspect_ratio: configurations.aspect_ratio,
+        output_format: configurations.output_format,
+        output_quality: configurations.output_quality,
+        prompt_strength: 0.8,
+        num_inference_steps: configurations.num_inference_steps,
+      };
 
   try {
     const output = await replicate.run(

@@ -6,4 +6,4 @@ export const auth_routes: string[] = [
   "/verify",
 ];
 
-export const public_routes: string[] = ["/"];
+export const public_routes: string[] = ["/", "/api/webhook/training"];
